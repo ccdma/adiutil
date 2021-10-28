@@ -1,15 +1,30 @@
 import dataclasses as d
 import subprocess, re
 import adi
+from adiutil.static import *
 
 @d.dataclass
 class Device:
 
     serial: str
     uri_usb: str
+    __pluto: adi.Pluto = None
 
-    def create_pluto(self):
-        return adi.Pluto(self.uri_usb)
+    """
+    adi.Plutoは初回呼び出し時に初期化されます
+    2回目以降はキャッシュを返します
+    """
+    def get_pluto(self):
+        if self.__pluto != None:
+            return self.__pluto
+        pluto = adi.Pluto(self.uri_usb)
+        # set init parameter
+        pluto.tx_lo = DEFAULT_TX_LO
+        pluto.rx_lo = DEFAULT_RX_LO
+        pluto.tx_rf_bandwidth = DEFAULT_TX_BW
+        pluto.rx_rf_bandwidth = DEFAULT_RX_BW
+        self.__pluto = pluto
+        return pluto
 
 class DeviceList:
 
