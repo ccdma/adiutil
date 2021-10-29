@@ -8,7 +8,12 @@ class Device:
 
     serial: str
     uri_usb: str
+    name: str = None
     __pluto: adi.Pluto = None
+
+    def __post_init__(self):
+        if self.name == None:
+            self.name = f"[{self.uri_usb}](serial={self.serial})"
 
     """
     adi.Plutoは初回呼び出し時に初期化されます
