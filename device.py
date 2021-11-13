@@ -9,7 +9,7 @@ class Device:
     serial: str
     uri_usb: str
     name: str = None
-    __pluto: adi.Pluto = None
+    __sdr: adi.Pluto = None
 
     def __post_init__(self):
         if self.name == None:
@@ -19,18 +19,19 @@ class Device:
     adi.Plutoは初回呼び出し時に初期化されます
     2回目以降はキャッシュを返します
     """
-    def get_pluto(self):
-        if self.__pluto != None:
-            return self.__pluto
-        pluto = adi.Pluto(self.uri_usb)
+    def get_pluto(self, init=False):
+        if self.__sdr != None:
+            return self.__sdr
+        sdr = adi.Pluto(self.uri_usb)
         # set init parameter
-        pluto.tx_lo = DEFAULT_TX_LO
-        pluto.rx_lo = DEFAULT_RX_LO
-        pluto.tx_rf_bandwidth = DEFAULT_TX_BW
-        pluto.rx_rf_bandwidth = DEFAULT_RX_BW
-        pluto.sample_rate = SAMPLE_RATE
-        self.__pluto = pluto
-        return pluto
+        if init:    # 受信にに使用する場合、sdr.txの設定はしないほうがよい
+            sdr.tx_lo = DEFAULT_TX_LO
+            sdr.rx_lo = DEFAULT_RX_LO
+            sdr.tx_rf_bandwidth = DEFAULT_TX_BW
+            sdr.rx_rf_bandwidth = DEFAULT_RX_BW
+            sdr.sample_rate = SAMPLE_RATE
+        self.__sdr = sdr
+        return sdr
 
 class DeviceList:
 
