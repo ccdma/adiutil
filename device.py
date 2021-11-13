@@ -28,6 +28,7 @@ class Device:
         pluto.rx_lo = DEFAULT_RX_LO
         pluto.tx_rf_bandwidth = DEFAULT_TX_BW
         pluto.rx_rf_bandwidth = DEFAULT_RX_BW
+        pluto.sample_rate = SAMPLE_RATE
         self.__pluto = pluto
         return pluto
 
