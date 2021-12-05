@@ -55,7 +55,8 @@ class DeviceList:
     
     def find(self, serial: str) -> Device:
         for device in self.devices:
-            if device.serial == serial:
+            # 文字列後方一致
+            if device.serial[-len(serial):] == serial:
                 return device
         raise Exception("device not found")
 
