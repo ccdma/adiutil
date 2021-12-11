@@ -15,6 +15,10 @@ class Device:
         if self.name == None:
             self.name = f"[{self.uri_usb}](serial={self.serial})"
 
+    @property
+    def serial_short(self):
+        return self.serial[-5:]
+
     """
     adi.Plutoは初回呼び出し時に初期化されます
     2回目以降はキャッシュを返します
